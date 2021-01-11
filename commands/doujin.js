@@ -38,7 +38,7 @@ module.exports = {
 							text: "bot created by nurd#0388"
 						}
 					}
-				});
+				})
 			});
 		} else {
 			message.channel.send({

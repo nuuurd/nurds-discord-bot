@@ -1,8 +1,18 @@
+function isNumeric(str) {
+	if (typeof str != "string") return false
+	return !isNaN(str) && 
+		!isNaN(parseFloat(str)) 
+}
+
 module.exports = {
 	name: 'roll',
 	description: 'Rolls a random number between 1 and 100',
 	args: true,
 	execute(message, args) {
+
+		const member = message.guild.member(message.author);
+
+		var embedColor = member.displayColor;
 
 		var rangeOne = args[0]
 		var rangeTwo = args[1]
@@ -14,6 +24,14 @@ module.exports = {
 			rangeTwo = 100
 		}
 
+		if (!isNumeric(args[0]) || !isNumeric(args[0])) {
+			message.channel.send({
+				embed: {
+					color: embedColor,
+					description: `<@${message.author.id}>, you must put in a number, not a string!`
+				}
+			})
+		}
 		if (rangeTwo < rangeOne) {
 			message.channel.send({
 				embed: '<@' + `${message.author.id}` + '>,' + ' the minimum cannot be higher than the maximum!'
