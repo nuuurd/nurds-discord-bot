@@ -15,7 +15,15 @@ module.exports = {
 
 		var embedColor = member.displayColor;
 
-		request('https://dog.ceo/api/breeds/image/random', { json: true }, (err, res, body) => {
+		var dogBreedLookup = 'https://dog.ceo/api/breed/' + args[0] + '/images/random';
+
+		console.log(dogBreedLookup);
+
+		if (!args[0]) {
+			dogBreedLookup = 'https://dog.ceo/api/breeds/image/random';
+		}
+
+		request(dogBreedLookup, { json: true }, (err, res, body) => {
 			if (err) { return console.log(err); }
 			var dogImageLink = (body.message);
 			var dogBreed = dogImageLink.substr(30);
