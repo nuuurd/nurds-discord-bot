@@ -6,19 +6,13 @@ module.exports = {
 	description: 'Searches up doujin from nhentai',
 	args: true,
 	execute(message, args) {
-		const doujinNumber = args
+		const doujinNumber = args[0]
 
-		if (!doujinNumber.length) {
+		if (!doujinNumber) {
 			message.channel.send('<@' + `${message.author.id}` + '>' + ', you didn\'t say any arguments!');
 		} else {
-			async function getDoujinCover() {
-				return doujinCover = await api.getBook(doujinNumber).then(book => {
-					api.getImageURL(book.cover)
-				});
-			}
-			getDoujinCover().then(message.channel.send)
-				.catch(error => {
-				console.error(error);
+			api.getBook(doujinNumber).then(book => {
+				message.channel.send(api.getImageURL(book.cover));
 			});
 		}
 	},
