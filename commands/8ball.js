@@ -9,19 +9,17 @@ module.exports = {
 
         const eightBallNum = Math.floor(Math.random() * 8)
         var eightBall = '';
+        var eightBallArgs = message.content;
+        var eightBallQuestion = eightBallArgs.replace(/n8ball /g, '');
 
-        var eightBallQuestion = message.content;
-        eightBallQuestion = eightBallQuestion.replace("n8ball ", '');
-        console.log(eightBallQuestion);
-
-        if (!eightBallQuestion) {
+        if (!args.length) {
             message.channel.send({
                 embed: {
                     color: embedColor,
                     description: '<@' + `${message.author.id}` + '>' + ', you didn\'t ask a question!'
                 }
             });
-        } else if (eightBallQuestion) {
+        } else {
             switch (eightBallNum) {
                 case 0:
                     eightBall = 'it is certain.'
@@ -52,7 +50,10 @@ module.exports = {
             message.channel.send({
                 embed: {
                     color: embedColor,
-                    description: '<@' + `${message.author.id}` + '>, ' + eightBall
+                    description: '<@' + `${message.author.id}` + '>, ' + eightBall,
+                    footer: {
+                        text: 'Question was: ' + eightBallQuestion
+                    }
                 }
             });
         }

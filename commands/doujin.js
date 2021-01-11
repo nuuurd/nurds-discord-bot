@@ -12,10 +12,6 @@ module.exports = {
 
 		const doujinNumber = args[0]
 
-		const filter = (reaction, user) => {
-			return reaction.emoji.name === '👍';
-		};
-
 		if (!doujinNumber) {
 			message.channel.send({
 				embed: {
@@ -44,7 +40,6 @@ module.exports = {
 					}
 				});
 			});
-
 		} else {
 			message.channel.send({
 				embed: {

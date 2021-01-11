@@ -7,6 +7,12 @@ module.exports = {
 
         var embedColor = member.displayColor;
 
+        var discordRulesID = message.guild.rulesChannelID
+        if (discordRulesID == null) {
+            discordRulesID = 'N/A'
+        } else {
+            discordRulesID = `<#${message.guild.rulesChannelID}>`
+        };
         message.channel.send({
             embed: {
                 title: `${message.guild.name}`,
@@ -37,7 +43,7 @@ module.exports = {
                     },
                     {
                         name: "Rules Channel",
-                        value: '<#' + `${message.guild.rulesChannelID}` + '>',
+                        value: discordRulesID,
                         inline: true
                     },
                     {
