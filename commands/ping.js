@@ -1,4 +1,6 @@
-﻿module.exports = {
+﻿const Discord = require('discord.js');
+
+module.exports = {
 	name: 'ping',
 	description: 'Sends the ping of the bot.',
 	args: true,
@@ -7,16 +9,18 @@
 
 		var embedColor = member.displayColor;
 
-		var ping = `${Date.now() - message.createdTimestamp}`
 		message.channel.send({
 			embed: {
-				description: ':ping_pong: Pong! My ping is `' + ping + 'ms`',
-				color: embedColor,
-				timestamp: new Date(),
-				footer: {
-					text: "bot made by nurd#0388"
-				}
+				description: 'Waiting...',
+				color: embedColor
 			}
-		});
+		}).then(m => {
+			var ping = m.createdTimestamp - message.createdTimestamp
+
+			const newPingEmbed = new Discord.MessageEmbed()
+				.setDescription(':ping_pong: Pong! My ping is `' + ping + 'ms`')
+				.setColor(embedColor)
+			m.edit(newPingEmbed)
+		})
 	},
 };
