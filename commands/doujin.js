@@ -10,10 +10,12 @@ module.exports = {
 
 		if (!doujinNumber) {
 			message.channel.send('<@' + `${message.author.id}` + '>' + ', you didn\'t say any arguments!');
-		} else {
+		} else if (message.channel.nsfw) {
 			api.getBook(doujinNumber).then(book => {
 				message.channel.send(api.getImageURL(book.cover));
 			});
+		} else {
+			message.reply("You naughty boi, this channel isn't nsfw!");
 		}
 	},
 };
