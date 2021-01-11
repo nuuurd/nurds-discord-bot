@@ -17,8 +17,6 @@ module.exports = {
 
 		var dogBreedLookup = 'https://dog.ceo/api/breed/' + args[0] + '/images/random';
 
-		console.log(dogBreedLookup);
-
 		if (!args[0]) {
 			dogBreedLookup = 'https://dog.ceo/api/breeds/image/random';
 		}
