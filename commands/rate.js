@@ -10,11 +10,15 @@ module.exports = {
 		var rateCommandMessage = message.content;
 		var rateUser = rateCommandMessage.replace(/nrate /g, '');
 
+		if (!args[0]) {
+			rateUser = '<@' + message.author.id + '>';
+		};
+
 		const rateNum = Math.floor(Math.random() * 10) + 1;
 
 		message.channel.send({
 			embed: {
-				description: 'Hmm, I would rate `' + rateUser + '` as ' + rateNum + '/10',
+				description: 'Hmm, I would rate ' + rateUser + ' as ' + rateNum + '/10',
 				color: embedColor
 			}
 		});

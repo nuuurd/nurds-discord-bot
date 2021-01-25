@@ -18,6 +18,13 @@ const cooldowns = new Discord.Collection();
 
 client.once('ready', () => {
 	console.log('Ready!');
+	client.user.setPresence({
+		status: "online", 
+		game: {
+			name: "testing",
+			type: "PLAYING" 
+		}
+	});
 });
 
 client.on('message', message => {

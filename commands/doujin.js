@@ -12,7 +12,14 @@ module.exports = {
 
 		const doujinNumber = args[0]
 
-		if (!doujinNumber) {
+		if (!message.channel.nsfw) {
+			message.channel.send({
+				embed: {
+					color: embedColor,
+					description: "You naughty boi, this channel isn't nsfw!"
+				}
+			});
+		} else if (!doujinNumber) {
 			message.channel.send({
 				embed: {
 					color: embedColor,
@@ -40,13 +47,6 @@ module.exports = {
 					}
 				})
 			});
-		} else {
-			message.channel.send({
-				embed: {
-					color: embedColor,
-					description: "You naughty boi, this channel isn't nsfw!" 
-				}
-			});
-		}
+		} 
 	},
 };

@@ -20,8 +20,9 @@ module.exports = {
 		if (!args[0]) {
 			rangeOne = 1
 		}
-		if (!args[1]) {
-			rangeTwo = 100
+		if (args[0] && !args[1]) {
+			rangeOne = 1
+			rangeTwo = args[0]
 		}
 
 		if (!isNumeric(args[0]) || !isNumeric(args[0])) {
@@ -44,8 +45,10 @@ module.exports = {
 		}
 
 		var rollNum = getRandomInt(rangeOne, rangeTwo);
+		var rollNumPercent = (rangeTwo - rangeOne + 1) / 100
 
-		if (rollNum < 25) {
+
+		if (rollNum < 25 * rollNumPercent) {
 			message.channel.send({
 				embed: {
 					color: 0xfc0303,
@@ -55,7 +58,7 @@ module.exports = {
 					}
 				}
 			});
-		} else if (rollNum > 26 && rollNum < 75) {
+		} else if (rollNum > 26 * rollNumPercent && rollNum < 75 * rollNumPercent) {
 			message.channel.send({
 				embed: {
 					color: 0xfcb103,
@@ -65,7 +68,7 @@ module.exports = {
 					}
 				}
 			});
-		} else if (rollNum > 76) {
+		} else if (rollNum > 76 * rollNumPercent) {
 			message.channel.send({
 				embed: {
 					color: 0x77fc03,

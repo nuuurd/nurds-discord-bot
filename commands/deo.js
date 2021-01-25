@@ -1,8 +1,8 @@
 module.exports = {
 	name: 'deo',
-	description: 'deo.',
+	description: 'deo',
 	args: true,
 	execute(message, args) {
-		message.channel.send('deo = noob')
+		message.channel.send('noob');
 	}
 };
