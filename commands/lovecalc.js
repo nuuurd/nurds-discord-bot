@@ -12,8 +12,15 @@ module.exports = {
 		var personOne = args[0]
 		var personTwo = args[1]
 
-		if (!personOne || !personTwo) {
+		if (!personOne) {
 			message.channel.send('You didn\'t pass any arguments!')
+		} else if ((personOne == `<@!${message.author.id}>` && personTwo == `<@!${message.author.id}>`) || (personOne == `<@${message.author.id}>` && personTwo == `<@${message.author.id}>`)) {
+			message.channel.send({
+				embed: {
+					color: embedColor,
+					description: `That's kinda desperate, <@${message.author.id}>...`
+				}
+			})
 		} else {
 			if (rollNum < 25) {
 				message.channel.send({
