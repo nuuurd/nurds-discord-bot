@@ -7,16 +7,16 @@ function getRandomColor() {
     return color;
 }
 
-module.exports = {
-	name: 'randomcolor',
-	description: 'Sends a random colour.',
-	args: true,
-	execute(message, args) {
-		message.channel.send({
-			embed: {
-				color: getRandomColor(),
-				description: 'Color: ' + getRandomColor(),
-			}
-		});
-	},
-};
+module.exports.run = async (bot, message, args) => {
+	message.channel.send({
+		embed: {
+			color: getRandomColor(),
+			description: 'Color: ' + getRandomColor(),
+		}
+	});
+}
+
+module.exports.help = {
+	name: "randomcolor",
+	description: ""
+}
