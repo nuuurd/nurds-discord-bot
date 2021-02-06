@@ -6,37 +6,37 @@ function toTitleCase(str) {
 	});
 }
 
-module.exports.run = async (bot, message, args) => {
-	const member = message.guild.member(message.author);
+module.exports = {
+	name: 'dog',
+	description: 'Sends dog pics!!',
+	args: true,
+	execute(message, args) {
+		const member = message.guild.member(message.author);
 
-	var embedColor = member.displayColor;
+		var embedColor = member.displayColor;
 
-	var dogBreedLookup = 'https://dog.ceo/api/breed/' + args[0] + '/images/random';
+		var dogBreedLookup = 'https://dog.ceo/api/breed/' + args[0] + '/images/random';
 
-	if (!args[0]) {
-		dogBreedLookup = 'https://dog.ceo/api/breeds/image/random';
-	}
+		if (!args[0]) {
+			dogBreedLookup = 'https://dog.ceo/api/breeds/image/random';
+		}
 
-	request(dogBreedLookup, { json: true }, (err, res, body) => {
-		if (err) { return console.log(err); }
-		var dogImageLink = (body.message);
-		var dogBreed = dogImageLink.substr(30);
-		dogBreed = dogBreed.split('/')[0];
-		dogBreed = dogBreed.replace(/-/g, ' ');
-		dogBreed = toTitleCase(dogBreed);
-		message.channel.send({
-			embed: {
-				color: embedColor,
-				description: 'Breed: ' + dogBreed,
-				image: {
-					url: dogImageLink
+		request(dogBreedLookup, { json: true }, (err, res, body) => {
+			if (err) { return console.log(err); }
+			var dogImageLink = (body.message);
+			var dogBreed = dogImageLink.substr(30);
+			dogBreed = dogBreed.split('/')[0];
+			dogBreed = dogBreed.replace(/-/g, ' ');
+			dogBreed = toTitleCase(dogBreed);
+			message.channel.send({
+				embed: {
+					color: embedColor,
+					description: 'Breed: ' + dogBreed,
+					image: {
+						url: dogImageLink
+					}
 				}
-			}
+			});
 		});
-	});
-}
-
-module.exports.help = {
-	name: "dog",
-	description: ""
-}
+	},
+};

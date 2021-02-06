@@ -1,77 +1,68 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, token, mySqlPass } = require('./config.json');
+const { prefix, token } = require('./config.json');
 const request = require('request');
 const { API, } = require('nhentai-api');
-const mysql = require("mysql");
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
-fs.readdir("./commands/", (err, files) => {
-	if (err) console.error(err);
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
-	let jsfiles = files.filter(f => f.split(".").pop() === "js");
-	if (jsfiles.length <= 0) {
-		console.log("No commands to load!");
-		return;
-	}
-
-	console.log(`Loading ${jsfiles.length} commands!`);
-
-	jsfiles.forEach((f, i) => {
-		let props = require(`./commands/${f}`);
-		client.commands.set(props.help.name, props);
-	})
-});
-
-var con = mysql.createConnection({
-	host: "localhost",
-	user: "root",
-	password: mySqlPass,
-	database: "sadb"
-});
-
-con.connect(err => {
-	if (err) throw err;
-	console.log("Connected to database!");
-	con.query("SHOW TABLES", console.log);
-});
-
-function generateXp() {
-	let min = 20;
-	let max = 30;
-
-	return Math.floor(Math.random() * (max - min + 1)) + min;
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.name, command);
 }
 
-client.on('message', async message => {
-	if (message.author.client) return;
-	if (message.channel.type === "dm") return;
+const cooldowns = new Discord.Collection();
 
-	con.query(`SELECT * FROM xp WHERE id = '${message.author.id}'`, (err, rows) => {
-		if (err) throw err;
-
-		let sql;
-
-		if (rows.length < 1) {
-			sql = `INSERT INTO xp (id, xp) VALUES ('${message.author.id}', ${generateXp()})`
-		} else {
-			let xp = rows[0].xp;
-			sql = `UPDATE xp SET xp = ${xp + generateXp()} WHERE id = '${message.author.id}'`;
-		}
-
-		con.query(sql);
+client.once('ready', () => {
+	console.log('Ready!');
+	client.user.setPresence({
+		game: {
+			name: 'test',
+			type: 'PLAYING'
+		},
+		status: 'idle'
 	})
+});
 
-	let messageArray = message.content.split(/\s+/g);
-	let command = messageArray[0];
-	let args = messageArray.slice(1);
+client.on('message', message => {
+	if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-	if (!command.startsWith(prefix)) return;
+	const args = message.content.slice(prefix.length).trim().split(/ +/);
+	const commandName = args.shift().toLowerCase();
 
-	let cmd = client.commands.get(command.slice(prefix.length))
-	if (cmd) cmd.run(bot, message, args);
-})
+	if (!client.commands.has(commandName)) return;
+
+	const command = client.commands.get(commandName);
+
+	if (!cooldowns.has(command.name)) {
+		cooldowns.set(command.name, new Discord.Collection());
+	}
+
+	const now = Date.now();
+	const timestamps = cooldowns.get(command.name);
+	const cooldownAmount = (command.cooldown || 3) * 1000;
+
+	if (timestamps.has(message.author.id)) {
+		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+		if (now < expirationTime) {
+			const timeLeft = (expirationTime - now) / 1000;
+			return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+		}
+	}
+
+	timestamps.set(message.author.id, now);
+	setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+
+	try {
+		command.execute(message, args);
+	} catch (error) {
+		console.error(error);
+		message.reply('there was an error trying to execute that command!');
+	}
+});
 
 client.login(token);
