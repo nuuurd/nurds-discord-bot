@@ -6,9 +6,9 @@
         var uwuText = message.content;
         uwuText = uwuText.replace(/nuwuify /g, '');
 
-        let stutterChance = 0.1
-        let prefixChance = 0.05
-        let suffixChance = 0.15
+        let stutterChance = 0.2
+        let prefixChance = 0.40
+        let suffixChance = 0.40
         let words = {
             love: 'wuv',
             mr: 'mistuh',
@@ -103,6 +103,11 @@
             }
             return text
         }
-        message.channel.send(owoify(uwuText))
+
+        if (owoify(uwuText).length > 2000) {
+            message.channel.send('I can\'t send this message, it\'s over 2,000 characters!');
+        } else {
+            message.channel.send(owoify(uwuText))
+        }
 	}
 };

@@ -45,14 +45,18 @@ module.exports = {
 			outputText.push(pigLatinWord)
 		}
 
-		message.channel.send({
-			embed: {
-				description: outputText.join(' '),
-				color: embedColor,
-				footer: {
-					text: 'Original text: ' + pigLatinText
+		if (outputText.join(' ').length > 2000) {
+			message.channel.send('I can\'t send this message, it\'s over 2,000 characters!');
+		} else {
+			message.channel.send({
+				embed: {
+					description: outputText.join(' '),
+					color: embedColor,
+					footer: {
+						text: 'Original text: ' + pigLatinText
+					}
 				}
-			} 
-		})
+			})
+		}
 	}
 };

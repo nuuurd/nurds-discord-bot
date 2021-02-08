@@ -13,6 +13,14 @@ module.exports = {
         } else {
             discordRulesID = `<#${message.guild.rulesChannelID}>`
         };
+
+        var afkChannel = message.guild.afkChannelID
+        if (afkChannel == null) {
+            afkChannel = 'N/A'
+        } else {
+            afkChannel = `<#${message.guild.afkChannelID}>`
+        };
+
         message.channel.send({
             embed: {
                 title: `${message.guild.name}`,
@@ -23,7 +31,7 @@ module.exports = {
                 fields: [
                     {
                     name: "Server Members",
-                    value: `${message.guild.memberCount}`,
+                    value: `Members: ${message.guild.memberCount}`,
                     inline: true
                     },
                     {
@@ -48,7 +56,23 @@ module.exports = {
                     },
                     {
                         name: "Nitro Boosts",
-                        value: 'Boost Count: ' + `${message.guild.premiumSubscriptionCount}` + '\n' + 'Tier: ' + `${message.guild.premiumTier}`
+                        value: `Boost Count: ${message.guild.premiumSubscriptionCount} \nTier: ${message.guild.premiumTier}`,
+                        inline: true
+                    },
+                    {
+                        name: "NSFW Filter Level",
+                        value: `Level: ${message.guild.explicitContentFilter}`,
+                        inline: true
+                    },
+                    {
+                        name: "Partnered/Verified",
+                        value: `Partnered: ${message.guild.partnered}\nVerified: ${message.guild.verified}`,
+                        inline: true
+                    },
+                    {
+                        name: "AFK Channel",
+                        value: afkChannel,
+                        inline: true
                     }
                 ],
                 timestamp: new Date(),
